@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Complete Profile | AlumniConnect</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --bg-light: #f8fafc;
+        }
+
+        body {
+            background: var(--bg-light);
+            font-family: 'Inter', sans-serif;
+            color: #1e293b;
+        }
+
+        .profile-card {
+            border: none;
+            border-radius: 24px;
+            background: #ffffff;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 2rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .section-icon {
+            width: 36px;
+            height: 36px;
+            background: #eef2ff;
+            color: var(--primary-color);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .form-label {
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control, .form-select {
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            border: 1px solid #e2e8f0;
+            background-color: #ffffff;
+            transition: all 0.2s;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+
+        .progress {
+            height: 8px;
+            border-radius: 10px;
+            background-color: #f1f5f9;
+        }
+
+        .sticky-progress {
+            position: sticky;
+            top: 20px;
+            z-index: 10;
+        }
+
+        .btn-save {
+            background: var(--primary-color);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-save:hover {
+            background: #4338ca;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container py-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h4 class="fw-bold mb-1">Set Up Your Profile</h4>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="/student/dashboard" class="text-decoration-none">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Profile Completion</li>
+                </ol>
+            </nav>
+        </div>
+        <a href="/student/dashboard" class="btn btn-light rounded-pill px-4 border">
+            <i class="bi bi-arrow-left me-2"></i>Exit to Dashboard
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card profile-card p-4 p-md-5">
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} border-0 rounded-3 shadow-sm">{{ message }}</div>
+                    {% endfor %}
+                {% endwith %}
+
+                <form method="POST">
+
+                    <div class="section-header mt-0">
+                        <div class="section-icon"><i class="bi bi-mortarboard-fill"></i></div>
+                        <h5 class="fw-bold mb-0">Academic Information</h5>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label class="form-label">University / College Name</label>
+                            <input type="text" name="college" class="form-control" placeholder="e.g. Stanford University"
+                                   value="{{ profile.college if profile else '' }}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Degree Branch</label>
+                            <input type="text" name="branch" class="form-control" placeholder="e.g. Computer Science"
+                                   value="{{ profile.branch if profile else '' }}" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Graduation</label>
+                            <input type="number" name="graduation_year" class="form-control" placeholder="2026"
+                                   value="{{ profile.graduation_year if profile else '' }}" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Current Year</label>
+                            <select name="current_year" class="form-select">
+                                <option value="">Select</option>
+                                {% for year in ['1st Year','2nd Year','3rd Year','4th Year'] %}
+                                    <option value="{{ year }}" {% if profile and profile.current_year == year %}selected{% endif %}>{{ year }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="section-header">
+                        <div class="section-icon"><i class="bi bi-rocket-takeoff-fill"></i></div>
+                        <h5 class="fw-bold mb-0">Skills & Preferences</h5>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Key Skills</label>
+                            <input type="text" name="skills" class="form-control" placeholder="Python, SQL, UI Design"
+                                   value="{{ profile.skills if profile else '' }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Certifications</label>
+                            <input type="text" name="certifications" class="form-control" placeholder="AWS Cloud, Meta Frontend"
+                                   value="{{ profile.certifications if profile else '' }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Target Industry Domain</label>
+                            <input type="text" name="preferred_domain" class="form-control" placeholder="FinTech, EdTech, AI"
+                                   value="{{ profile.preferred_domain if profile else '' }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Preferred Work Location</label>
+                            <input type="text" name="preferred_location" class="form-control" placeholder="Remote, New York, London"
+                                   value="{{ profile.preferred_location if profile else '' }}">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Areas of Interest</label>
+                            <textarea name="interests" class="form-control" rows="2" placeholder="Tell us what excites you professionally...">{{ profile.interests if profile else '' }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="section-header">
+                        <div class="section-icon"><i class="bi bi-link-45deg"></i></div>
+                        <h5 class="fw-bold mb-0">Professional Presence</h5>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label"><i class="bi bi-linkedin me-1 text-primary"></i> LinkedIn</label>
+                            <input type="url" name="linkedin" class="form-control" placeholder="https://linkedin.com/in/..."
+                                   value="{{ profile.linkedin if profile else '' }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label"><i class="bi bi-github me-1 text-dark"></i> GitHub</label>
+                            <input type="url" name="github" class="form-control" placeholder="https://github.com/..."
+                                   value="{{ profile.github if profile else '' }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label"><i class="bi bi-globe me-1 text-success"></i> Portfolio</label>
+                            <input type="url" name="portfolio" class="form-control" placeholder="https://yourwork.com"
+                                   value="{{ profile.portfolio if profile else '' }}">
+                        </div>
+                        <div class="col-12 mt-4">
+                            <label class="form-label">Professional Bio</label>
+                            <textarea name="bio" class="form-control" rows="4" placeholder="Briefly describe your background and goals...">{{ profile.bio if profile else '' }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="mt-5 pt-3 border-top text-end">
+                        <button class="btn btn-primary btn-save shadow">
+                            Save Profile Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="sticky-progress">
+                <div class="card profile-card p-4">
+                    <h6 class="fw-bold mb-3">Profile Completion</h6>
+                    {% if profile %}
+                    <div class="d-flex align-items-end justify-content-between mb-2">
+                        <h3 class="fw-bold text-primary mb-0">{{ profile.profile_strength }}%</h3>
+                        <span class="text-muted small">Target: 100%</span>
+                    </div>
+                    <div class="progress mb-4">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: {{ profile.profile_strength }}%"></div>
+                    </div>
+
+                    <div class="alert bg-light border-0 small py-3">
+                        <i class="bi bi-lightbulb-fill text-warning me-2"></i>
+                        <strong>Tip:</strong> Adding a LinkedIn URL increases your discoverability by 40%.
+                    </div>
+                    {% else %}
+                    <p class="text-muted small">Start filling out the form to see your profile strength grow.</p>
+                    {% endif %}
+
+                    <hr>
+                    <div class="d-flex align-items-center gap-3 mt-2">
+                        <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center" style="width:24px; height:24px; font-size: 0.7rem;">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <p class="small text-muted mb-0">Your data is stored securely and only visible to verified alumni.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

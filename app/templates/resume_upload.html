@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Check | AlumniConnect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #4f46e5;
+            --secondary-bg: #f8fafc;
+        }
+
+        body {
+            background: var(--secondary-bg);
+            font-family: 'Inter', sans-serif;
+            color: #1e293b;
+        }
+
+        .analyzer-card {
+            border: none;
+            border-radius: 24px;
+            background: #ffffff;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Drag & Drop Area */
+        .drop-zone {
+            border: 2px dashed #e2e8f0;
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            background: #fdfdfd;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .drop-zone:hover {
+            border-color: var(--primary-blue);
+            background: #f5f7ff;
+        }
+
+        .drop-zone-icon {
+            font-size: 3rem;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+
+        .file-input {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .btn-analyze {
+            background: var(--primary-blue);
+            border: none;
+            padding: 12px 40px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-analyze:hover {
+            background: #4338ca;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+        }
+
+        .info-step {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .step-number {
+            width: 28px;
+            height: 28px;
+            background: #eef2ff;
+            color: var(--primary-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+
+            <div class="text-center mb-5">
+                <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill mb-3 fw-bold">POWERED BY AI</span>
+                <h1 class="fw-bold mb-2">Resume Analyzer</h1>
+                <p class="text-muted mx-auto" style="max-width: 500px;">
+                    Upload your resume to get instant feedback on ATS compatibility, skill gaps, and keyword optimization.
+                </p>
+            </div>
+
+            <div class="analyzer-card">
+                <div class="row g-0">
+
+                    <div class="col-md-4 bg-light p-4 p-lg-5 border-end">
+                        <h5 class="fw-bold mb-4">How it works</h5>
+
+                        <div class="info-step">
+                            <div class="step-number">1</div>
+                            <div>
+                                <h6 class="fw-bold mb-1">Upload</h6>
+                                <p class="small text-muted mb-0">PDF or Word documents only.</p>
+                            </div>
+                        </div>
+
+                        <div class="info-step">
+                            <div class="step-number">2</div>
+                            <div>
+                                <h6 class="fw-bold mb-1">Scan</h6>
+                                <p class="small text-muted mb-0">Our AI extracts skills and experiences.</p>
+                            </div>
+                        </div>
+
+                        <div class="info-step">
+                            <div class="step-number">3</div>
+                            <div>
+                                <h6 class="fw-bold mb-1">Score</h6>
+                                <p class="small text-muted mb-0">Get a detailed report and improvement tips.</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-5 p-3 rounded-3 bg-white border">
+                            <i class="bi bi-shield-lock-fill text-success me-2"></i>
+                            <span class="small fw-medium">Privacy Guaranteed</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8 p-4 p-lg-5">
+                        <form method="POST" enctype="multipart/form-data" id="uploadForm">
+                            <div class="drop-zone mb-4" id="dropZone">
+                                <div class="drop-zone-icon">
+                                    <i class="bi bi-cloud-arrow-up"></i>
+                                </div>
+                                <h5 class="fw-bold">Click or drag resume here</h5>
+                                <p class="text-muted small">Supports PDF, DOCX (Max 5MB)</p>
+                                <input type="file" name="resume" class="file-input" id="fileInput" accept=".pdf,.doc,.docx" required>
+                                <div id="file-name-display" class="mt-2 fw-bold text-primary"></div>
+                            </div>
+
+                            <div class="alert alert-info border-0 rounded-3 d-flex align-items-center mb-4">
+                                <i class="bi bi-info-circle-fill fs-5 me-3"></i>
+                                <span class="small">Improve your chances by up to 60% with an ATS-optimized resume.</span>
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary btn-analyze w-100 w-md-auto">
+                                    Start Analysis <i class="bi bi-stars ms-2"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center gap-4 mt-5">
+                <div class="text-muted small"><i class="bi bi-check2-circle text-primary me-2"></i>ATS Friendly</div>
+                <div class="text-muted small"><i class="bi bi-check2-circle text-primary me-2"></i>Keyword Extraction</div>
+                <div class="text-muted small"><i class="bi bi-check2-circle text-primary me-2"></i>Formatting Check</div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    // Visual feedback for file selection
+    const fileInput = document.getElementById('fileInput');
+    const display = document.getElementById('file-name-display');
+    const dropZone = document.getElementById('dropZone');
+
+    fileInput.addEventListener('change', (e) => {
+        if (fileInput.files.length > 0) {
+            display.textContent = "Selected: " + fileInput.files[0].name;
+            dropZone.style.borderColor = "#4f46e5";
+            dropZone.style.background = "#f5f7ff";
+        }
+    });
+</script>
+
+</body>
+</html>
