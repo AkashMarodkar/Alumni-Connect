@@ -9,6 +9,11 @@ mysql = MySQL()
 def create_app():
     app = Flask(__name__)
     app.config.from_object('config.Config')
+    print("MYSQL_HOST =", app.config.get("MYSQL_HOST"))
+    print("MYSQL_PORT =", app.config.get("MYSQL_PORT"))
+    print("MYSQL_USER =", app.config.get("MYSQL_USER"))
+    print("MYSQL_DB =", app.config.get("MYSQL_DB"))
+    print("MYSQL_PASSWORD =", app.config.get("MYSQL_PASSWORD"))
 
     mysql.init_app(app)
 
