@@ -188,8 +188,8 @@ def register():
             return redirect("/register")
 
         cur.execute("""
-            INSERT INTO users (full_name, email, contact, password, role)
-            VALUES (%s,%s,%s,%s,%s)
+            INSERT INTO users (full_name, email, contact, password, role, is_approved)
+            VALUES (%s,%s,%s,%s,%s,%s)
         """, (full_name, email, contact, password, role,0))
 
         mysql.connection.commit()
