@@ -219,18 +219,22 @@ def login():
             if not user['is_approved']:
                 flash("Your account is not approved yet. Please wait for admin approval.", "warning")
                 return redirect("/login")
+            
+            if user['role'] == 'admin':
+                if user['password'] == password:
+                    session['user_id'] = user['id']
+                    session['role'] = user['role']
+                    session['name'] = user['full_name']
+                    return redirect('/admin/dashboard')
+                elif check_password_hash(user['password'], password):
+                    session['user_id'] = user['id']
+                    session['role'] = user['role']
+                    session['name'] = user['full_name']
+                    if user['role'] == "student":
+                        return redirect("/student/dashboard")
+                    elif user['role'] == "alumni":
+                        return redirect("/alumni/dashboard")
 
-            if check_password_hash(user['password'], password):
-                session['user_id'] = user['id']
-                session['role'] = user['role']
-                session['name'] = user['full_name']
-
-                if user['role'] == "student":
-                    return redirect("/student/dashboard")
-                elif user['role'] == "alumni":
-                    return redirect("/alumni/dashboard")
-                elif user['role'] == "admin":
-                    return redirect("/admin/dashboard")
 
             else:
                 flash("Invalid password!", "danger")
