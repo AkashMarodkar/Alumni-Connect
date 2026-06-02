@@ -1,7 +1,7 @@
 import os
 
 class Config:
-    SECRET_KEY = "supersecretkey"
+    SECRET_KEY = os.getenv("SECRET_KEY", "supersecretkey")
 
     MYSQL_HOST = os.getenv("MYSQLHOST")
     MYSQL_USER = os.getenv("MYSQLUSER")
